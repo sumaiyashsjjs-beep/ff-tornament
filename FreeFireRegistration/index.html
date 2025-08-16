@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Fire Tournament Registration</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .form-container {
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      max-width: 450px;
+      width: 100%;
+    }
+    .form-container h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #222;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 12px;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      outline: none;
+    }
+    input:focus, select:focus {
+      border-color: #007bff;
+    }
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      border: none;
+      background: #007bff;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-container">
+    <h2>Free Fire Tournament Registration</h2>
+    <form id="ffForm">
+      <label>In-Game Name</label>
+      <input type="text" id="ign" required>
+
+      <label>Number / Gmail</label>
+      <input type="text" id="number_gmail" required>
+
+      <label>Free Fire UID *</label>
+      <input type="text" id="uid" required>
+
+      <label>WhatsApp</label>
+      <input type="text" id="whatsapp" required>
+
+      <label>Payment Method *</label>
+      <select id="payment_method" required>
+        <option value="">-- Select Payment Method --</option>
+        <option value="bkash">Bkash</option>
+        <option value="nagad">Nagad</option>
+        <option value="rocket">Rocket</option>
+        <option value="other">Other</option>
+      </select>
+
+      <label>Payment Number</label>
+      <input type="text" id="payment_number" placeholder="Enter Payment Number" required>
+
+      <button type="submit">Submit Registration</button>
+    </form>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCP9GGU_sJ3xbQs0TUQODMfy3uMW4vkzzo",
+      authDomain: "towhid-28aaa.firebaseapp.com",
+      databaseURL: "https://towhid-28aaa-default-rtdb.firebaseio.com",
+      projectId: "towhid-28aaa",
+      storageBucket: "towhid-28aaa.appspot.com",
+      messagingSenderId: "123456789",
+      appId: "1:123456789:web:abc123"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    document.getElementById("ffForm").addEventListener("submit", function(e){
+      e.preventDefault();
+
+      const data = {
+        ign: document.getElementById("ign").value,
+        number_gmail: document.getElementById("number_gmail").value,
+        uid: document.getElementById("uid").value,
+        whatsapp: document.getElementById("whatsapp").value,
+        payment_method: document.getElementById("payment_method").value,
+        payment_number: document.getElementById("payment_number").value,
+        timestamp: new Date().toISOString()
+      };
+
+      push(ref(db, "registrations/"), data)
+        .then(() => {
+          alert("✅ Registration Submitted Successfully!");
+          document.getElementById("ffForm").reset();
+        })
+        .catch((error) => {
+          console.error("❌ Error:", error);
+          alert("Error submitting registration!");
+        });
+    });
+  </script>
+
+</body>
+</html>
